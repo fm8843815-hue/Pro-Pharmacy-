@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#f5f7fb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<title>PharmaOS</title>
+<style>
+:root{--bg:#f5f7fb;--glass:#ffffffcc;--text:#101828;--muted:#667085;--line:#e5e7eb;--blue:#007aff;--green:#34c759;--red:#ff3b30;--shadow:0 12px 35px #10182812}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:radial-gradient(circle at 90% 0,#e8f1ff 0,transparent 35%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Tahoma,Arial,sans-serif;min-height:100vh}
+button,input,select{font:inherit}button{border:0}.app{max-width:1200px;margin:auto;padding:env(safe-area-inset-top) 14px calc(90px + env(safe-area-inset-bottom))}
+.top{position:sticky;top:0;z-index:5;padding:12px 2px 10px;background:#f5f7fbd9;backdrop-filter:blur(22px);display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px}.orb{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#fff,#dfeaff);display:grid;place-items:center;box-shadow:inset 0 1px #fff,var(--shadow);font-size:23px}.brand b{font-size:19px}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.iconbtn{width:42px;height:42px;border-radius:14px;background:var(--glass);box-shadow:var(--shadow);font-size:19px}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0}.card{padding:16px;border:1px solid #ffffff;background:#ffffffc9;backdrop-filter:blur(18px);border-radius:22px;box-shadow:var(--shadow)}.card .num{font-size:21px;font-weight:750;margin-top:7px}.muted{color:var(--muted);font-size:12px}
+.panel{background:#ffffffd9;border:1px solid #fff;border-radius:24px;padding:16px;box-shadow:var(--shadow);margin:12px 0}.panel h2{font-size:17px;margin:0 0 14px}
+.search{display:flex;gap:8px}.input{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:15px;background:#fff;outline:none}.input:focus{border-color:#9ec5ff;box-shadow:0 0 0 4px #007aff12}
+.btn{padding:12px 15px;border-radius:15px;font-weight:650}.blue{background:var(--blue);color:white}.green{background:var(--green);color:white}.gray{background:#eef2f7}.red{background:var(--red);color:#fff}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:540px}th,td{text-align:right;padding:11px 8px;border-bottom:1px solid #eef0f3;font-size:13px}th{color:var(--muted)}
+.page{display:none}.page.active{display:block}.bottom{position:fixed;bottom:0;left:0;right:0;z-index:10;background:#ffffffd9;backdrop-filter:blur(22px);border-top:1px solid #fff;display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -8px 30px #10182810}.bottom button{background:none;color:#667085;font-size:10px;display:flex;flex-direction:column;gap:3px;align-items:center}.bottom button.active{color:var(--blue);font-weight:700}.bottom span{font-size:21px}
+.cartrow{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid #eef0f3}.qty{display:flex;align-items:center;gap:8px}.round{width:32px;height:32px;border-radius:50%;background:#eef3f9}.total{display:flex;justify-content:space-between;font-size:20px;font-weight:800;padding-top:14px}
+.modal{display:none;position:fixed;inset:0;z-index:30;background:#0005;align-items:flex-end;justify-content:center}.modal.open{display:flex}.sheet{width:min(650px,100%);background:#fff;border-radius:28px 28px 0 0;padding:20px;max-height:85vh;overflow:auto}.video{width:100%;aspect-ratio:1.35;background:#101828;border-radius:20px;object-fit:cover}.scanbox{position:relative}.scanbox:before{content:"";position:absolute;left:10%;right:10%;top:50%;height:2px;background:#00ff8a;box-shadow:0 0 12px #00ff8a;z-index:2;animation:scanline 1.8s ease-in-out infinite}.scanbox:after{content:"";position:absolute;inset:15% 8%;border:3px solid #fff;border-radius:20px;box-shadow:0 0 0 999px #0005,0 0 24px #fff8;pointer-events:none;z-index:1}@keyframes scanline{0%,100%{transform:translateY(-70px)}50%{transform:translateY(70px)}}
+.notice{padding:12px;border-radius:16px;background:#eef6ff;color:#1456a0;font-size:13px;margin-top:10px}
+@media(min-width:850px){.app{padding-bottom:25px}.bottom{position:sticky;top:0;bottom:auto;margin:0 auto 20px;border-radius:20px;width:min(700px,100%);border:1px solid #fff}.cards{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div class="brand"><div class="orb">💊</div><div><b id="name">PharmaOS</b><small>نظام صيدلية ذكي</small></div></div><button class="iconbtn" onclick="openScanner()">▣</button></header>
+
+<section id="home" class="page active">
+<div class="cards"><div class="card"><div class="muted">مبيعات اليوم</div><div class="num" id="salesToday">0.00 ج.م</div></div><div class="card"><div class="muted">الفواتير</div><div class="num" id="invoiceCount">0</div></div><div class="card"><div class="muted">الأدوية</div><div class="num" id="productCount">0</div></div><div class="card"><div class="muted">قيمة المخزون</div><div class="num" id="stockValue">0.00 ج.م</div></div></div>
+<div class="panel"><h2>تنبيه المخزون</h2><div id="alerts" class="muted">لا توجد تنبيهات</div></div>
+<div class="panel"><h2>إجراءات سريعة</h2><div class="actions"><button class="btn blue" onclick="go('cashier')">🛒 بيع جديد</button><button class="btn gray" onclick="openScanner()">▣ قراءة باركود</button><button class="btn gray" onclick="go('products')">＋ دواء</button></div></div>
+</section>
+
+<section id="cashier" class="page">
+<div class="panel"><h2>الكاشير</h2><div class="search"><input class="input" id="search" placeholder="اسم الدواء أو الباركود"><button class="btn blue" onclick="searchProducts()">بحث</button></div><div class="actions"><button class="btn gray" onclick="openScanner()">📷 كاميرا</button></div><div id="results"></div></div>
+<div class="panel"><h2>السلة</h2><div id="cart"></div><div class="total"><span>الإجمالي</span><span id="total">0.00 ج.م</span></div><div class="actions"><input class="input" id="paid" type="number" placeholder="المدفوع"><button class="btn green" onclick="finishSale()">إتمام البيع</button><button class="btn red" onclick="cart=[];renderCart()">تفريغ</button></div><div class="notice" id="change">الباقي: 0.00 ج.م</div></div>
+</section>
+
+<section id="products" class="page"><div class="panel"><h2>الأدوية والمخزون</h2><input class="input" id="pn" placeholder="اسم الدواء"><div class="actions"><input class="input" id="pb" placeholder="الباركود"><input class="input" id="pc" placeholder="الشركة"></div><div class="actions"><input class="input" id="buy" type="number" placeholder="سعر الشراء"><input class="input" id="sell" type="number" placeholder="سعر البيع"><input class="input" id="qty" type="number" placeholder="الكمية"></div><button class="btn blue" style="margin-top:10px" onclick="addProduct()">حفظ الدواء</button></div><div class="panel"><h2>قائمة الأدوية</h2><div id="plist" class="tablewrap"></div></div></section>
+
+<section id="sales" class="page"><div class="panel"><h2>المبيعات</h2><div id="slist" class="tablewrap"></div><div class="actions"><button class="btn blue" onclick="exportCSV()">تصدير Excel</button><button class="btn gray" onclick="printReport()">تقرير / PDF</button></div></div></section>
+<section id="settings" class="page"><div class="panel"><h2>الإعدادات</h2><input class="input" id="pharmacy" placeholder="اسم الصيدلية"><div class="actions"><button class="btn blue" onclick="saveSettings()">حفظ</button></div><div class="notice">يمكن تثبيت الموقع كتطبيق على الهاتف من المتصفح. البيانات محفوظة محلياً ويمكن تشغيل النظام بدون إنترنت بعد التثبيت.</div></div></section>
+</div>
+
+<nav class="bottom"><button class="active" data-p="home" onclick="go('home')"><span>⌂</span>الرئيسية</button><button data-p="cashier" onclick="go('cashier')"><span>🛒</span>الكاشير</button><button data-p="products" onclick="go('products')"><span>💊</span>الأدوية</button><button data-p="sales" onclick="go('sales')"><span>🧾</span>التقارير</button><button data-p="settings" onclick="go('settings')"><span>⚙</span>الإعدادات</button></nav>
+
+<div class="modal" id="scanModal"><div class="sheet"><div style="display:flex;justify-content:space-between;align-items:center"><h2>قارئ الباركود</h2><button class="iconbtn" onclick="closeScanner()">×</button></div><div class="scanbox"><video id="video" class="video" autoplay muted playsinline></video></div><div class="notice" id="scanStatus">وجّه الباركود داخل الإطار الأبيض — سيتم الإغلاق تلقائياً عند القراءة.</div><div class="actions"><button class="btn gray" onclick="closeScanner()">إغلاق</button></div></div></div>
+
+<script>
+const money=n=>(+n||0).toFixed(2)+" ج.م";let products=JSON.parse(localStorage.getItem("ph_products")||"[]"),sales=JSON.parse(localStorage.getItem("ph_sales")||"[]"),cart=[],stream=null,detector=null;
+function save(){localStorage.setItem("ph_products",JSON.stringify(products));localStorage.setItem("ph_sales",JSON.stringify(sales));update()}
+function go(p){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(p).classList.add("active");document.querySelectorAll(".bottom button").forEach(x=>x.classList.toggle("active",x.dataset.p===p));if(p==="products")renderProducts();if(p==="sales")renderSales();if(p==="cashier")searchProducts()}
+function update(){let d=new Date().toLocaleDateString("ar-EG"),today=sales.filter(s=>s.date.startsWith(d));salesToday.textContent=money(today.reduce((a,s)=>a+s.total,0));invoiceCount.textContent=today.length;productCount.textContent=products.length;stockValue.textContent=money(products.reduce((a,p)=>a+p.buy*p.qty,0));let low=products.filter(p=>p.qty<=5);alerts.innerHTML=low.length?low.map(p=>`⚠️ ${p.name} — ${p.qty} متبقي`).join("<br>"):"لا توجد تنبيهات";}
+function addProduct(){if(!pn.value.trim()||!sell.value)return alert("أدخل اسم الدواء وسعر البيع");products.push({id:Date.now(),name:pn.value.trim(),barcode:pb.value.trim(),company:pc.value.trim(),buy:+buy.value||0,sell:+sell.value,qty:+qty.value||0});save();[pn,pb,pc,buy,sell,qty].forEach(x=>x.value="");renderProducts()}
+function renderProducts(){plist.innerHTML=products.length?`<table><tr><th>الدواء</th><th>باركود</th><th>بيع</th><th>كمية</th><th></th></tr>${products.map(p=>`<tr><td>${p.name}</td><td>${p.barcode||"-"}</td><td>${money(p.sell)}</td><td>${p.qty}</td><td><button class="btn red" onclick="products=products.filter(x=>x.id!==${p.id});save();renderProducts()">حذف</button></td></tr>`).join("")}</table>`:"لا توجد أدوية";}
+function searchProducts(){let q=(search.value||"").toLowerCase();let a=products.filter(p=>(p.name+" "+p.barcode).toLowerCase().includes(q));results.innerHTML=a.length?`<table><tr><th>الدواء</th><th>السعر</th><th>المتاح</th><th></th></tr>${a.map(p=>`<tr><td>${p.name}</td><td>${money(p.sell)}</td><td>${p.qty}</td><td><button class="btn blue" onclick="addCart(${p.id})">إضافة</button></td></tr>`).join("")}</table>`:"<div class='muted' style='padding:20px'>ابحث عن دواء أو امسح الباركود</div>"}
+function addCart(id){let p=products.find(x=>x.id===id);if(!p)return;let c=cart.find(x=>x.id===id);if(c)c.qty++;else cart.push({id,name:p.name,price:p.sell,qty:1});renderCart()}
+function renderCart(){let t=cart.reduce((a,c)=>a+c.price*c.qty,0);document.getElementById("cart").innerHTML=cart.length?cart.map((c,i)=>`<div class="cartrow"><b>${c.name}</b><div class="qty"><button class="round" onclick="cart[${i}].qty=Math.max(1,cart[${i}].qty-1);renderCart()">−</button>${c.qty}<button class="round" onclick="cart[${i}].qty++;renderCart()">+</button></div><b>${money(c.price*c.qty)}</b></div>`).join(""):"<div class='muted'>السلة فارغة</div>";total.textContent=money(t);change.textContent="الباقي: "+money((+paid.value||0)-t)}
+paid.oninput=renderCart;
+function finishSale(){let t=cart.reduce((a,c)=>a+c.price*c.qty,0),p=+paid.value||0;if(!cart.length)return alert("السلة فارغة");if(p<t)return alert("المبلغ المدفوع أقل من الإجمالي");for(let c of cart){let x=products.find(p=>p.id===c.id);if(x)x.qty=Math.max(0,x.qty-c.qty)}sales.push({date:new Date().toLocaleString("ar-EG"),items:cart.map(x=>({...x})),total:t,paid:p,change:p-t});cart=[];paid.value="";save();renderCart();alert("تم حفظ الفاتورة")}
+function renderSales(){slist.innerHTML=sales.length?`<table><tr><th>التاريخ</th><th>الإجمالي</th><th>المدفوع</th><th>الباقي</th></tr>${sales.slice().reverse().map(s=>`<tr><td>${s.date}</td><td>${money(s.total)}</td><td>${money(s.paid)}</td><td>${money(s.change)}</td></tr>`).join("")}</table>`:"لا توجد مبيعات"}
+function exportCSV(){let rows=[["التاريخ","الإجمالي","المدفوع","الباقي"],...sales.map(s=>[s.date,s.total,s.paid,s.change])];let blob=new Blob(["\ufeff"+rows.map(r=>r.join(",")).join("\n")],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="تقرير-المبيعات.csv";a.click()}
+function printReport(){window.print()}
+function saveSettings(){localStorage.setItem("ph_name",pharmacy.value);name.textContent=pharmacy.value||"PharmaOS";alert("تم الحفظ")}
+let scanning=false;
+function scanFeedback(){
+  try{
+    if(navigator.vibrate) navigator.vibrate([80,40,120]);
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(AC){
+      const ac=new AC(),o=ac.createOscillator(),g=ac.createGain();
+      o.type="sine";o.frequency.value=880;g.gain.value=.08;
+      o.connect(g);g.connect(ac.destination);o.start();
+      setTimeout(()=>{o.stop();ac.close()},140);
+    }
+  }catch(e){}
+}
+async function openScanner(){
+  scanModal.classList.add("open");
+  scanStatus.textContent="جارٍ تشغيل الكاميرا...";
+  try{
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) throw new Error("NO_CAMERA");
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"},width:{ideal:1280},height:{ideal:720}}});
+    video.srcObject=stream;
+    await video.play();
+    if("BarcodeDetector" in window){
+      detector=new BarcodeDetector({formats:["ean_13","ean_8","code_128","upc_a","upc_e","itf","codabar"]});
+      scanning=true;
+      scanStatus.textContent="وجّه الباركود داخل الإطار الأبيض";
+      scanLoop();
+    }else{
+      scanStatus.textContent="هذا المتصفح لا يدعم قارئ الباركود المدمج. استخدم Chrome حديثاً.";
+    }
+  }catch(e){
+    scanStatus.textContent="لم يتم فتح الكاميرا. تأكد من السماح بالكاميرا وأن الموقع يعمل عبر HTTPS.";
+    alert("اسمح للموقع باستخدام الكاميرا من إعدادات المتصفح ثم حاول مرة أخرى.");
+  }
+}
+async function scanLoop(){
+  if(!scanning||!stream||!detector)return;
+  try{
+    const codes=await detector.detect(video);
+    if(codes.length){
+      const value=codes[0].rawValue;
+      scanning=false;
+      scanFeedback();
+      scanStatus.textContent="✓ تم التعرف على الباركود: "+value;
+      search.value=value;
+      setTimeout(()=>{closeScanner();go("cashier");searchProducts()},180);
+      return;
+    }
+  }catch(e){}
+  requestAnimationFrame(scanLoop);
+}
+function closeScanner(){
+  scanning=false;
+  scanModal.classList.remove("open");
+  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
+  video.srcObject=null;
+}
+let saved=localStorage.getItem("ph_name");if(saved)name.textContent=saved;update();renderCart();
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body></html>
